@@ -139,7 +139,10 @@ class Model(metaclass=ModelMeta):
         for f in self._meta.field_list.values():
             if isinstance(f, fields.NestedModel):
                 if f.name in kwargs:
-                    setattr(self, f.name, f.nested_model.from_dict(kwargs[f.name]))
+                    if kwargs[f.name] is None:
+                        setattr(self, f.name, None)
+                    else:
+                        setattr(self, f.name, f.nested_model.from_dict(kwargs[f.name]))
                 else:
                     setattr(self, f.name, f.nested_model())
 
